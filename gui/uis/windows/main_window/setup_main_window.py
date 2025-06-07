@@ -87,14 +87,14 @@ class SetupMainWindow:
             "show_top" : True,
             "is_active" : False
         },
-        # {
-        #     "btn_icon" : "icon_file.svg",
-        #     "btn_id" : "btn_new_file",
-        #     "btn_text" : "New File",
-        #     "btn_tooltip" : "Create new file",
-        #     "show_top" : True,
-        #     "is_active" : False
-        # },
+        {
+            "btn_icon" : "icon_file.svg",
+            "btn_id" : "btn_fetch_data",
+            "btn_text" : "Fetch Roads data",
+            "btn_tooltip" : "Fetch Roads data",
+            "show_top" : True,
+            "is_active" : False
+        },
         # {
         #     "btn_icon" : "icon_folder_open.svg",
         #     "btn_id" : "btn_open_file",
@@ -423,9 +423,13 @@ class SetupMainWindow:
         saved_key = load_api_key()
         # print("saved_key is:",saved_key)
         self.ui.load_pages.api_input.setText(saved_key)
-        # 连接按钮
+        # 连接按钮-Modelscope模型页（page_llm）
         self.ui.load_pages.send_btn.clicked.connect(self.on_send_clicked)
         self.ui.load_pages.api_save_btn.clicked.connect(self.on_save_api_key)
+
+        # 连接按钮-获取数据页（page_fetch_data）
+        self.ui.load_pages.execute_btn_GD.clicked.connect(self.fetch_roads_data)
+
         # ///////////////////////////////////////////////////////////////
         # END - EXAMPLE CUSTOM WIDGETS
         # ///////////////////////////////////////////////////////////////

@@ -154,12 +154,14 @@ class Ui_MainPages(object):
 #         self.page_3_layout.addWidget(self.empty_page_label)
 
 #         self.pages.addWidget(self.page_3)
-        # 页面 LLM
+        # ============================================
+        # 页面3内容 - Modelscope模型对话
+        # ============================================
         self.page_llm = QWidget()
         self.page_llm.setObjectName(u"page_llm")
         self.page_llm.setStyleSheet(u"""
             QFrame {
-                font-size: 16pt;
+                font-size: 20pt;
             }
             QLabel, QLineEdit, QPushButton, QTextEdit {
                 color: #f0f0f0;
@@ -181,18 +183,8 @@ class Ui_MainPages(object):
         """)
         self.page_3_layout = QVBoxLayout(self.page_llm)
         self.page_3_layout.setObjectName(u"page_3_layout")
-        self.pages.addWidget(self.page_llm)
 
-        self.main_pages_layout.addWidget(self.pages)
-
-        # self.retranslateUi(MainPages)
-
-        self.pages.setCurrentIndex(0)
-
-
-        QMetaObject.connectSlotsByName(MainPages)
-
-         # ModelScope API Key 设置区域
+        # ModelScope API Key 设置区域
         self.api_frame = QFrame(self.page_llm)
         self.api_frame.setFrameShape(QFrame.StyledPanel)
         self.api_frame.setFrameShadow(QFrame.Raised)
@@ -253,7 +245,6 @@ class Ui_MainPages(object):
         self.prompt_hint_layout.addWidget(self.prompt_hint_label)
         self.prompt_hint_layout.addWidget(self.prompt_hint)
 
-
         # 输入区域
         self.chat_input_layout = QHBoxLayout()
         self.chat_input = QLineEdit()
@@ -276,6 +267,123 @@ class Ui_MainPages(object):
         # 布局整合
         self.page_3_layout.addWidget(self.api_frame)
         self.page_3_layout.addWidget(self.chat_frame)
+
+        self.pages.addWidget(self.page_llm)
+
+        # ============================================
+        # 页面4内容 - POI数据获取工具
+        # ============================================
+        
+        # 页面4Widget与layout的定义：
+        self.page_fetch_data = QWidget()
+        self.page_fetch_data.setObjectName(u"page_fetch_data")
+        self.page_fetch_data.setStyleSheet(u"""
+            QFrame {
+                font-size: 20pt;
+            }
+            QLabel, QLineEdit, QPushButton, QTextEdit {
+                color: #f0f0f0;
+                background-color: #2a2d35;
+            }
+            QTextEdit {
+                border: 1px solid #444;
+                padding: 6px;
+            }
+            QLineEdit {
+                border: 1px solid #444;
+            }
+            QPushButton {
+                background-color: #3b7cff;
+                color: white;
+                border-radius: 4px;
+                padding: 6px;
+            }
+        """)
+        self.page_fetch_data_layout = QVBoxLayout(self.page_fetch_data)
+
+        # 配置区域 Frame
+        self.config_frame = QFrame(self.page_fetch_data)
+        self.config_frame.setFrameShape(QFrame.StyledPanel)
+        self.config_frame.setFrameShadow(QFrame.Raised)
+        self.config_layout_GD = QVBoxLayout(self.config_frame)
+        self.config_layout_GD.setSpacing(8)
+        
+        # 行政区划代码输入
+        self.city_code_layout = QHBoxLayout()
+        self.city_code_label = QLabel("行政区划代码:")
+        self.city_code_input = QLineEdit()
+        self.city_code_input.setPlaceholderText("例如: 110000 (北京)")
+        self.city_code_layout.addWidget(self.city_code_label)
+        self.city_code_layout.addWidget(self.city_code_input)
+        
+        # 输出路径选择
+        self.output_path_layout = QHBoxLayout()
+        self.output_path_label = QLabel("输出路径:")
+        self.output_path_input = QLineEdit()
+        self.output_path_input.setPlaceholderText("留空使用默认路径")
+        # self.output_path_btn = QPushButton("浏览...")
+        # self.output_path_btn.setFixedWidth(80)
+        self.output_path_layout.addWidget(self.output_path_label)
+        self.output_path_layout.addWidget(self.output_path_input)
+        # self.output_path_layout.addWidget(self.output_path_btn)
+        
+        # 高德API Key，相关组件后加上`_GD`后缀用于标识
+        self.api_key_layout_GD = QHBoxLayout()
+        self.api_key_label_GD= QLabel("高德API Key:")
+        self.api_key_input_GD = QLineEdit()
+        self.api_key_input_GD.setPlaceholderText("留空使用默认Key")
+        self.api_key_layout_GD.addWidget(self.api_key_label_GD)
+        self.api_key_layout_GD.addWidget(self.api_key_input_GD)
+        
+        # 添加到配置区域
+        self.config_layout_GD.addLayout(self.city_code_layout)
+        self.config_layout_GD.addLayout(self.output_path_layout)
+        self.config_layout_GD.addLayout(self.api_key_layout_GD)
+        
+        # 执行按钮区域
+        self.execute_frame_GD = QFrame(self.page_fetch_data)
+        self.execute_layout_GD = QHBoxLayout(self.execute_frame_GD)
+        self.execute_layout_GD.setContentsMargins(0, 0, 0, 0)
+        
+        self.execute_btn_GD = QPushButton("获取POI数据")
+        self.execute_btn_GD.setFixedHeight(40)
+        self.execute_layout_GD.addWidget(self.execute_btn_GD)
+        
+        # 输出日志区域
+        self.log_frame = QFrame(self.page_fetch_data)
+        self.log_frame.setFrameShape(QFrame.StyledPanel)
+        self.log_layout = QVBoxLayout(self.log_frame)
+        
+        self.log_label = QLabel("执行日志:")
+        self.log_output = QTextEdit()
+        self.log_output.setReadOnly(True)
+        # 为日志区域添加特定样式
+        self.log_output.setStyleSheet("""
+            font-family: 'Courier New'; 
+            font-size: 12px;
+            background-color: #1e2229;  # 添加背景色
+            border: 1px solid #444;    # 保持边框一致
+        """)
+        
+        self.log_layout.addWidget(self.log_label)
+        self.log_layout.addWidget(self.log_output)
+        
+        # 将页面四添加到主布局，命名为page_fetch_data
+        self.page_fetch_data_layout.addWidget(self.config_frame)
+        self.page_fetch_data_layout.addWidget(self.execute_frame_GD)
+        self.page_fetch_data_layout.addWidget(self.log_frame, 1)  # 日志区域占据剩余空间
+
+        self.pages.addWidget(self.page_fetch_data)
+
+        # 
+        QMetaObject.connectSlotsByName(MainPages)
+
+        # 定义整个页面
+        self.main_pages_layout.addWidget(self.pages)
+
+        # self.retranslateUi(MainPages)
+
+        self.pages.setCurrentIndex(0)
     # setupUi
 
     def retranslateUi(self, MainPages):

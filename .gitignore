@@ -7,3 +7,6 @@ data.csv
 data.json
 data.txt
 llm_config.json
+data
+cache
+GetRoadPOI.exe

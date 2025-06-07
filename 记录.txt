@@ -1,2 +1,11 @@
 把读取和显示功能做了，起码能根据ComBox的内容显示对应的信息，但有点小bug，table的表头显示是数字，没法显示指定内容
 后续加入输入框的筛选功能    # 6.6
+
+环境配置：
+```bash
+pip install pyside6
+pip install requests
+pip install pandas
+pip install matplotlib
+```
+注意：GetRoadPOI.exe手动gitignore了，请自行将其放入根目录

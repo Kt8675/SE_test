@@ -22,7 +22,7 @@ import os
 from gui.uis.windows.main_window.llm_function import save_api_key, handle_llm_query
 from data.data import province_list, city_dict, region_dict, code_dict, city_code_dict
 from ManipulateRoadPOI import *
-
+from gui.uis.windows.main_window.fetch_roads_data import get_road_poi
 
 # IMPORT QT CORE
 # ///////////////////////////////////////////////////////////////
@@ -114,6 +114,14 @@ class MainWindow(QMainWindow):
 
             # Load Page 3 
             MainFunctions.set_page(self, self.ui.load_pages.page_llm)
+
+        # Fetch data page
+        if btn.objectName() == "btn_fetch_data":
+            # Select Menu
+            self.ui.left_menu.select_only_one(btn.objectName())
+
+            # Load Page
+            MainFunctions.set_page(self, self.ui.load_pages.page_fetch_data)
 
         # BOTTOM INFORMATION
         if btn.objectName() == "btn_info":
@@ -358,6 +366,14 @@ class MainWindow(QMainWindow):
                     data_list.append(temp_list)
             data_list = data_list[0]
             return data_list
+        
+    def fetch_roads_data(self): 
+        code = self.ui.load_pages.city_code_input.text()
+        data_path = self.ui.load_pages.output_path_input.text()
+        apikey = self.ui.load_pages.api_key_input_GD.text()
+        stdout, errout = get_road_poi(code, data_path, apikey) # 返回值为：（标准流输出，错误流输出）
+        self.ui.load_pages.log_output.append(f"标准流输出：\n{stdout}\n错误流输出：\n{errout}")
+    
     
 # SETTINGS WHEN TO START
 # Set the initial class and also additional parameters of the "QApplication" class
