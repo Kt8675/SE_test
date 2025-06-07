@@ -2,3 +2,8 @@ __pycache__/
 .vscode/
 .git/
 .pyc
+AMap_adcode_citycode.xlsx
+data.csv
+data.json
+data.txt
+llm_config.json
