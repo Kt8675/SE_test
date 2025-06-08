@@ -303,6 +303,7 @@ class SetupMainWindow:
             context_color = self.themes["app_color"]["context_color"]
         )
         self.table_widget.setColumnCount(5)
+        
         # self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table_widget.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.table_widget.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -335,6 +336,7 @@ class SetupMainWindow:
         # self.table_widget.setHorizontalHeaderItem(4, self.column_4)
         # self.table_widget.setColumnWidth(0, 10)
 
+        # 控制表格列的宽度：第一列根据内容自动计算，1-4列平分剩余空间
         self.table_widget.horizontalHeader().setSectionResizeMode(0,  QHeaderView.ResizeToContents)
         for i in range(1, 5):
             self.table_widget.horizontalHeader().setSectionResizeMode(i,  QHeaderView.Stretch)
@@ -358,6 +360,8 @@ class SetupMainWindow:
         self.output_button = QPushButton("Output", self)
         self.output_button.clicked.connect(self.table_widget.get_data)
 
+        column_names = ["ID", "省", "市", "区/县", "街道"]
+        self.table_widget.setHorizontalHeaderLabels(column_names)
         # ADD WIDGETS
         # self.ui.load_pages.row_1_layout.addWidget(self.circular_progress_1)
         # self.ui.load_pages.row_1_layout.addWidget(self.circular_progress_2)
