@@ -130,7 +130,7 @@ class SetupMainWindow:
     ]
 
      # ADD TITLE BAR MENUS
-    # ///////////////////////////////////////////////////////////////
+    # ///////////////////////////////////////////////////////////////w
     add_title_bar_menus = [
         {
             "btn_icon" : "icon_search.svg",
@@ -253,7 +253,7 @@ class SetupMainWindow:
         # PY LINE EDIT
         self.line_edit = PyLineEdit(
             text = "",
-            place_holder_text = "Place holder text",
+            place_holder_text = "输入关键词以筛选",
             radius = 8,
             border_size = 2,
             color = self.themes["app_color"]["text_foreground"],
@@ -263,28 +263,30 @@ class SetupMainWindow:
             context_color = self.themes["app_color"]["context_color"]
         )
         self.line_edit.setMinimumHeight(30)
-
+        self.line_edit.editingFinished.connect(self.line_edit_filter_data)
         # TOGGLE BUTTON
-        self.toggle_button = PyToggle(
-            width = 50,
-            bg_color = self.themes["app_color"]["dark_two"],
-            circle_color = self.themes["app_color"]["icon_color"],
-            active_color = self.themes["app_color"]["context_color"]
-        ) 
+        # self.toggle_button = PyToggle(
+        #     width = 50,
+        #     bg_color = self.themes["app_color"]["dark_two"],
+        #     circle_color = self.themes["app_color"]["icon_color"],
+        #     active_color = self.themes["app_color"]["context_color"]
+        # ) 
 
 
         # self.combo_view = ComboBox(self).combo_layout
         # self.combo = ComboBox(self)
         self.data = (None, None, None)
+        self.data_list = []
         self.province_combo = QComboBox(self)
         self.city_combo = QComboBox(self)
         self.region_combo = QComboBox(self)
         self.province_combo.currentTextChanged.connect(self.init_city_combo)
-        self.province_combo.currentTextChanged.connect(self.select_and_filter_data)
+        # self.province_combo.currentTextChanged.connect(self.select_and_filter_data)
         self.city_combo.currentTextChanged.connect(self.init_region_combo)
-        self.city_combo.currentTextChanged.connect(self.select_and_filter_data)
+        # self.city_combo.currentTextChanged.connect(self.select_and_filter_data)
         self.region_combo.currentTextChanged.connect(self.pass_data)
         self.region_combo.currentTextChanged.connect(self.select_and_filter_data)
+        # self.region_combo.currentTextChanged.connect(self.test)
         self.init_privince_combo()
         # self.province_combo, self.city_combo = self.combo.province_combo, combo.city_combo
 
@@ -341,11 +343,11 @@ class SetupMainWindow:
 
         # 设置内容
         # self.table_widget.setData(self.data)
-        data = []
-        for i in range(100):
-            data.append(["广东省", "深圳市", "南山区", "南山大道"])
+        # data = []
+        # for i in range(100):
+        #     data.append(["广东省", "深圳市", "南山区", "南山大道"])
         
-        self.table_widget.set_data(data)
+        # self.table_widget.set_data(data)
 
         # select_all_button = QPushButton("Select All", self)
         # select_all_button.clicked.connect(self.table_widget.select_all)
@@ -357,29 +359,27 @@ class SetupMainWindow:
         # 获取数据，输出为csv文件
         self.output_button = QPushButton("Output", self)
         self.output_button.clicked.connect(self.table_widget.get_data)
-
+        self.output_all_button = QPushButton("Output All", self)
+        self.output_all_button.clicked.connect(self.table_widget.get_data_all)
+        self.previous_button = QPushButton("Previous", self)
+        self.previous_button.clicked.connect(self.table_widget.previous)
+        self.next_button = QPushButton("Next", self)
+        self.next_button.clicked.connect(self.table_widget.next)
+        self.previous_button.setText("Previous")
+        self.next_button.setText("Next")
         # ADD WIDGETS
-        # self.ui.load_pages.row_1_layout.addWidget(self.circular_progress_1)
-        # self.ui.load_pages.row_1_layout.addWidget(self.circular_progress_2)
-        # self.ui.load_pages.row_1_layout.addWidget(self.circular_progress_3)
-        # self.ui.load_pages.row_2_layout.addWidget(self.vertical_slider_1)
-        # self.ui.load_pages.row_2_layout.addWidget(self.vertical_slider_2)
-        # self.ui.load_pages.row_2_layout.addWidget(self.vertical_slider_3)
-        # self.ui.load_pages.row_2_layout.addWidget(self.vertical_slider_4)
-        # self.ui.load_pages.row_3_layout.addWidget(self.icon_button_1)
-        # self.ui.load_pages.row_3_layout.addWidget(self.icon_button_2)
-        # self.ui.load_pages.row_3_layout.addWidget(self.icon_button_3)
-        # self.ui.load_pages.row_3_layout.addWidget(self.push_button_1)
-        # self.ui.load_pages.row_3_layout.addWidget(self.push_button_2)
-        self.ui.load_pages.row_2_layout.addWidget(self.toggle_button)
+
         self.ui.load_pages.row_3_layout.addWidget(self.province_combo)
         self.ui.load_pages.row_3_layout.addWidget(self.city_combo)
         self.ui.load_pages.row_3_layout.addWidget(self.region_combo)
         # self.ui.load_pages.row_3_layout.addWidget(self.combo_view)
         self.ui.load_pages.row_4_layout.addWidget(self.line_edit)
         self.ui.load_pages.row_4_layout.addWidget(self.output_button)
+        self.ui.load_pages.row_4_layout.addWidget(self.output_all_button)
         self.ui.load_pages.row_5_layout.addWidget(self.select_all_button)
         self.ui.load_pages.row_5_layout.addWidget(self.table_widget)
+        self.ui.load_pages.row_5_layout.addWidget(self.previous_button)
+        self.ui.load_pages.row_5_layout.addWidget(self.next_button)
         
         # RIGHT COLUMN
         # ///////////////////////////////////////////////////////////////
@@ -421,7 +421,6 @@ class SetupMainWindow:
         # self.ui.right_column.btn_2_layout.addWidget(self.right_btn_2)
 
         saved_key = load_api_key()
-        # print("saved_key is:",saved_key)
         self.ui.load_pages.api_input.setText(saved_key)
         # 连接按钮-Modelscope模型页（page_llm）
         self.ui.load_pages.send_btn.clicked.connect(self.on_send_clicked)

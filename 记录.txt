@@ -9,3 +9,8 @@ pip install pandas
 pip install matplotlib
 ```
 注意：GetRoadPOI.exe手动gitignore了，请自行将其放入根目录
+
+6.9
+我重写了TableWidget的展示逻辑，因为一次性展示过多的条目会卡顿，所以改成了分页加载
+新增data/data.txt 作为缓冲区，方便分页加载数据
+目前还没加页面数的显示，因为加了之后与其他组件风格不一样，不美观，后面改ui的时候再考虑

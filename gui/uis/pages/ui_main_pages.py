@@ -17,6 +17,8 @@
 # IMPORT QT CORE
 # ///////////////////////////////////////////////////////////////
 from qt_core import *
+from gui.widgets import *
+from gui.core.json_themes import Themes
 
 
 class Ui_MainPages(object):
@@ -191,11 +193,25 @@ class Ui_MainPages(object):
         self.api_layout = QHBoxLayout(self.api_frame)
 
         self.api_label = QLabel("ModelScope API Key:")
-        self.api_input = QLineEdit()
-        self.api_input.setPlaceholderText("请输入 API Key")
+        # self.api_input = QLineEdit()
+        # self.api_input.setPlaceholderText("请输入 API Key")
+        # self.api_input.setMinimumHeight(30)
+        # self.api_input.setStyleSheet("font-size: 14px; padding: 4px;")
+        # self.api_input.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        themes = Themes()
+        self.themes = themes.items
+        self.api_input = PyLineEdit(
+            text = "",
+            place_holder_text = "请输入 API Key:",
+            radius = 8,
+            border_size = 2,
+            color = self.themes["app_color"]["text_foreground"],
+            selection_color = self.themes["app_color"]["white"],
+            bg_color = self.themes["app_color"]["dark_one"],
+            bg_color_active = self.themes["app_color"]["dark_three"],
+            context_color = self.themes["app_color"]["context_color"]
+        )
         self.api_input.setMinimumHeight(30)
-        self.api_input.setStyleSheet("font-size: 14px; padding: 4px;")
-        self.api_input.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
         self.api_save_btn = QPushButton("保存")
         self.api_save_btn.setMinimumWidth(80)

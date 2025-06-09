@@ -23,6 +23,8 @@ from gui.uis.windows.main_window.llm_function import save_api_key, handle_llm_qu
 from data.data import province_list, city_dict, region_dict, code_dict, city_code_dict
 from ManipulateRoadPOI import *
 from gui.uis.windows.main_window.fetch_roads_data import get_road_poi
+import pandas as pd
+import numpy as np
 
 # IMPORT QT CORE
 # ///////////////////////////////////////////////////////////////
@@ -194,7 +196,7 @@ class MainWindow(QMainWindow):
             top_settings.set_active_tab(False)            
 
         # DEBUG
-        print(f"Button {btn.objectName()}, clicked!")
+        # print(f"Button {btn.objectName()}, clicked!")
 
     # LEFT MENU BTN IS RELEASED
     # Run function when btn is released
@@ -205,7 +207,7 @@ class MainWindow(QMainWindow):
         btn = SetupMainWindow.setup_btns(self)
 
         # DEBUG
-        print(f"Button {btn.objectName()}, released!")
+        # print(f"Button {btn.objectName()}, released!")
 
     # RESIZE EVENT
     # ///////////////////////////////////////////////////////////////
@@ -305,9 +307,14 @@ class MainWindow(QMainWindow):
         province = self.province_combo.currentText()
         city = self.city_combo.currentText()
         region = self.region_combo.currentText()
-        data_list = self.filtered_data(province, city, region)
-        self.table_widget.set_data(data_list)
+        self.data_list = self.filtered_data(province, city, region)
+        self.table_widget.set_data(self.data_list)
         # print(province, city, region)
+
+    def line_edit_filter_data(self):
+        info = self.line_edit.text()
+        data_list = self.filtered_data_keywork(info)
+        self.table_widget.set_data(data_list)
 
     def filtered_data(self, province, city, region):
         df = os.listdir('./data')
@@ -317,7 +324,7 @@ class MainWindow(QMainWindow):
             city = '全部'
         # 选择指定城市
         if city != '全部':
-            print('getdata:' + city + '.')
+            # print('getdata:' + city + '.')
             df_info_name = 'DF_Road_Info#' + str(code_dict[city]) + '.csv'
             dir = 'DF_' + str(code_dict[city])
             df_info = os.path.join('data',dir, df_info_name) # Data_Info#440300\DF_Road_Info#440300.csv
@@ -326,7 +333,6 @@ class MainWindow(QMainWindow):
                 print(df_info)
                 print("file not exists")
                 return []
-            # print(1)
             df = load_df_csv(file=df_info)
             df_road_info = load_df_csv(file=df_info)    
             df_filtered = filter_df_column(df=df_road_info,columns=['name_road','name_district'])   # 仅选用道路信息和城市信息
@@ -374,6 +380,12 @@ class MainWindow(QMainWindow):
         stdout, errout = get_road_poi(code, data_path, apikey) # 返回值为：（标准流输出，错误流输出）
         self.ui.load_pages.log_output.append(f"标准流输出：\n{stdout}\n错误流输出：\n{errout}")
     
+    def filtered_data_keywork(self, info):
+        df = pd.DataFrame(self.data_list, columns=['name_road', 'name_district', 'city', 'province'])
+        df = filter_df_keyword(df=df,column='name_road', keyword=info)
+        return df.to_numpy().tolist()
+        
+
     
 # SETTINGS WHEN TO START
 # Set the initial class and also additional parameters of the "QApplication" class

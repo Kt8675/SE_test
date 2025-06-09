@@ -43,7 +43,7 @@ class ComboBox(QWidget):
             self.city_combo.addItem(city)
     
     def init_region_combo(self, city):
-        print('update region combo, city  is ' + city)
+        # print('update region combo, city  is ' + city)
         self.region_combo.clear()
         if city == "选择城市" or city == " ":
             # self.region_combo.clear()
