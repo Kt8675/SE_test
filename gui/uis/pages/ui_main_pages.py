@@ -72,6 +72,10 @@ class Ui_MainPages(object):
         self.page_1_layout.addWidget(self.welcome_base, 0, Qt.AlignHCenter)
 
         self.pages.addWidget(self.page_1)
+
+        # ============================================
+        # 页面2内容 - 数据展示
+        # ============================================
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
         self.page_2_layout = QVBoxLayout(self.page_2)
@@ -181,10 +185,12 @@ class Ui_MainPages(object):
                 color: white;
                 border-radius: 4px;
                 padding: 6px;
+                font-size: 20px;              
             }
         """)
         self.page_3_layout = QVBoxLayout(self.page_llm)
         self.page_3_layout.setObjectName(u"page_3_layout")
+        self.page_3_font_str = "20px"
 
         # ModelScope API Key 设置区域
         self.api_frame = QFrame(self.page_llm)
@@ -212,6 +218,11 @@ class Ui_MainPages(object):
             context_color = self.themes["app_color"]["context_color"]
         )
         self.api_input.setMinimumHeight(30)
+<<<<<<< HEAD
+=======
+        self.api_input.setStyleSheet(f"font-size: {self.page_3_font_str}; padding: 4px;")
+        self.api_input.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+>>>>>>> 24096447b53fb11ac1d09282ec715d73cdcfefc0
 
         self.api_save_btn = QPushButton("保存")
         self.api_save_btn.setMinimumWidth(80)
@@ -246,10 +257,10 @@ class Ui_MainPages(object):
         self.prompt_hint_layout = QHBoxLayout(self.prompt_hint_frame)
 
         self.prompt_hint_label = QLabel("提示词选择：")
-        self.prompt_hint_label.setStyleSheet("font-size: 14px;")
+        self.prompt_hint_label.setStyleSheet(f"font-size: {self.page_3_font_str};")
         self.prompt_hint = QComboBox()
         self.prompt_hint.setMinimumHeight(32)
-        self.prompt_hint.setStyleSheet("font-size: 14px;")
+        self.prompt_hint.setStyleSheet(f"font-size: {self.page_3_font_str};")
         self.prompt_hint.addItems([
             "",
             "现在请你根据我的输入，获取所有可能的街道信息，输入其规范名称。输入：",
@@ -267,7 +278,7 @@ class Ui_MainPages(object):
         self.chat_input.setPlaceholderText("请输入你的问题...")
         self.chat_input.setMinimumHeight(36)
         self.chat_input.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        self.chat_input.setStyleSheet("font-size: 14px; padding: 6px;")
+        self.chat_input.setStyleSheet(f"font-size: {self.page_3_font_str}; padding: 6px;")
 
         self.send_btn = QPushButton("发送")
         self.send_btn.setMinimumWidth(80)
@@ -291,11 +302,12 @@ class Ui_MainPages(object):
         # ============================================
         
         # 页面4Widget与layout的定义：
+        self.page_4_font_str = "20px"
         self.page_fetch_data = QWidget()
         self.page_fetch_data.setObjectName(u"page_fetch_data")
         self.page_fetch_data.setStyleSheet(u"""
             QFrame {
-                font-size: 20pt;
+                font-size: 20px;
             }
             QLabel, QLineEdit, QPushButton, QTextEdit {
                 color: #f0f0f0;
@@ -313,6 +325,7 @@ class Ui_MainPages(object):
                 color: white;
                 border-radius: 4px;
                 padding: 6px;
+                font-size: 20px;
             }
         """)
         self.page_fetch_data_layout = QVBoxLayout(self.page_fetch_data)
@@ -373,12 +386,20 @@ class Ui_MainPages(object):
         self.log_label = QLabel("执行日志:")
         self.log_output = QTextEdit()
         self.log_output.setReadOnly(True)
-        # 为日志区域添加特定样式
-        self.log_output.setStyleSheet("""
-            font-family: 'Courier New'; 
-            font-size: 12px;
-            background-color: #1e2229;  # 添加背景色
-            border: 1px solid #444;    # 保持边框一致
+
+        # 为所有控件动态设置字体
+        self.city_code_label.setStyleSheet(f"font-size: {self.page_4_font_str};")
+        self.city_code_input.setStyleSheet(f"font-size: {self.page_4_font_str}; padding: 4px;")
+        self.output_path_label.setStyleSheet(f"font-size: {self.page_4_font_str};")
+        self.output_path_input.setStyleSheet(f"font-size: {self.page_4_font_str}; padding: 4px;")
+        self.api_key_label_GD.setStyleSheet(f"font-size: {self.page_4_font_str};")
+        self.api_key_input_GD.setStyleSheet(f"font-size: {self.page_4_font_str}; padding: 4px;")
+        self.log_label.setStyleSheet(f"font-size: {self.page_4_font_str};")
+        self.log_output.setStyleSheet(f"""
+            font-family: 'Courier New';
+            font-size: {self.page_4_font_str};
+            background-color: #1e2229;
+            border: 1px solid #444;
         """)
         
         self.log_layout.addWidget(self.log_label)
