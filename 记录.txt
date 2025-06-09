@@ -14,3 +14,10 @@ pip install matplotlib
 我重写了TableWidget的展示逻辑，因为一次性展示过多的条目会卡顿，所以改成了分页加载
 新增data/data.txt 作为缓冲区，方便分页加载数据
 目前还没加页面数的显示，因为加了之后与其他组件风格不一样，不美观，后面改ui的时候再考虑
+
+6.9 23:14 author:hqj
+针对git merge的冲突删改了冲突代码，使程序能够运行。冲突内容以及进行的修改可以见github中的提交记录。
+
+将调用接口的方法改为非阻塞（即不占用主线程），调用过程中封锁相应按钮和输入框。删除原有阻塞逻辑。
+已知问题：在setup_main_window.py中定义的self.table_widget，在main.py无法通过self.table_widget调用，也无法通过ui的子属性调用。
+该问题导致每次启动时稳定报错，但看上去不影响功能。

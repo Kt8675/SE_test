@@ -361,7 +361,7 @@ class SetupMainWindow:
         # 获取数据，输出为csv文件
         self.output_button = QPushButton("Output", self)
         self.output_button.clicked.connect(self.table_widget.get_data)
-<<<<<<< HEAD
+
         self.output_all_button = QPushButton("Output All", self)
         self.output_all_button.clicked.connect(self.table_widget.get_data_all)
         self.previous_button = QPushButton("Previous", self)
@@ -370,11 +370,9 @@ class SetupMainWindow:
         self.next_button.clicked.connect(self.table_widget.next)
         self.previous_button.setText("Previous")
         self.next_button.setText("Next")
-=======
 
         column_names = ["ID", "省", "市", "区/县", "街道"]
         self.table_widget.setHorizontalHeaderLabels(column_names)
->>>>>>> 24096447b53fb11ac1d09282ec715d73cdcfefc0
         # ADD WIDGETS
 
         self.ui.load_pages.row_3_layout.addWidget(self.province_combo)
@@ -436,6 +434,9 @@ class SetupMainWindow:
 
         # 连接按钮-获取数据页（page_fetch_data）
         self.ui.load_pages.execute_btn_GD.clicked.connect(self.fetch_roads_data)
+
+        self.table_widget = self.table_widget  # 显式提醒自己这个组件已注册
+
 
         # ///////////////////////////////////////////////////////////////
         # END - EXAMPLE CUSTOM WIDGETS
