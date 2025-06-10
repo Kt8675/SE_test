@@ -447,11 +447,57 @@ class Ui_MainPages(object):
     # setupUi
 
     def fetch_roads_data(self): 
+        self.road_poi_process = None  # 存储进程对象
+        self.road_poi_timer = None     # 存储定时器对象
+
+        self.execute_btn_GD.setEnabled(False)
+        self.city_code_input.setEnabled(False)
+        self.output_path_input.setEnabled(False)
+        self.api_key_input_GD.setEnabled(False)
+        # 显示正在读取的状态
+        self.log_output.append("正在获取道路数据，请稍候...获取数据期间不能修改参数信息")
         code = self.city_code_input.text()
         data_path = self.output_path_input.text()
         apikey = self.api_key_input_GD.text()
-        stdout, errout = get_road_poi(code, data_path, apikey) # 返回值为：（标准流输出，错误流输出）
-        self.log_output.append(f"标准流输出：\n{stdout}\n错误流输出：\n{errout}")
+        try:
+            # 启动非阻塞进程
+            self.road_poi_process = get_road_poi(code, data_path, apikey)
+            
+            # 设置定时器检查进程状态
+            self.road_poi_timer = QTimer()
+            self.road_poi_timer.timeout.connect(self.check_road_poi_process)
+            self.road_poi_timer.start(500)  # 每500ms检查一次
+            
+        except Exception as e:
+            self.log_output.append(f"启动进程失败: {str(e)}")
+            self.enable_inputs()
+
+
+    def check_road_poi_process(self):
+        """检查非阻塞进程状态的定时器回调"""
+        if self.road_poi_process.poll() is not None:  # 进程已完成
+            self.road_poi_timer.stop()
+            
+            # 获取进程输出
+            stdout, stderr = self.road_poi_process.communicate()
+            # 显示结果
+            self.log_output.append(f"标准流输出：\n{stdout}\n错误流输出：\n{stderr}")
+            # 恢复按钮状态
+            self.enable_inputs()
+
+    def enable_inputs(self):
+        """恢复输入控件和按钮的状态"""
+        self.execute_btn_GD.setEnabled(True)
+        self.city_code_input.setEnabled(True)
+        self.output_path_input.setEnabled(True)
+        self.api_key_input_GD.setEnabled(True)
+
+    def closeEvent(self, event):
+        if self.road_poi_process and self.road_poi_process.poll() is None:
+            self.road_poi_process.terminate()
+        if self.road_poi_timer and self.road_poi_timer.isActive():
+            self.road_poi_timer.stop()
+        event.accept()
 
     def fetch_roads_data_TM(self):
         print("***************************")
@@ -460,6 +506,7 @@ class Ui_MainPages(object):
         apikey = self.api_key_input_GD.text()
         stdout = get_road_tian(code, data_path, apikey) # 返回值为：（标准流输出，错误流输出）
         self.log_output.append(f"标准流输出：\n{stdout}")
+
     def change_fetch_tool(self, text):
         if text == "高德API":
             # self.api_key_layout_GD.setVisible(True)

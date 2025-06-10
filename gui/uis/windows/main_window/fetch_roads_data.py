@@ -5,11 +5,74 @@ import os
 import requests
 import time
 
+# def get_road_poi(
+#     city_code: str,
+#     output_dir: str = "",
+#     amap_key: str = ""
+# ) -> Union[Tuple[str, str], subprocess.Popen]:
+#     """
+#     获取道路POI数据，非阻塞模式，创建新进程进行数据获取
+
+#     Args:
+#         city_code: 行政区划代码（必填，如"110000"）
+#         output_dir: 输出目录路径（空字符串表示使用默认值）
+#         amap_key: 高德地图API Key（空字符串表示使用默认值）
+#         non_blocking: 是否非阻塞运行（True返回进程对象）
+
+#     Returns:
+#         阻塞模式: Tuple[标准输出, 错误输出]
+#         非阻塞模式: subprocess.Popen 进程对象
+
+#     Raises:
+#         ValueError: 参数验证失败
+#         FileNotFoundError: 指定输出目录不存在
+#     """
+#     # 参数验证
+#     if not city_code.strip():
+#         raise ValueError("行政区划代码不能为空")
+    
+#     # 构造命令参数列表
+#     args = ["./GetRoadPOI.exe", city_code]
+    
+#     if output_dir.strip():
+#         output_path = Path(output_dir.strip())
+#         if not output_path.exists():
+#             raise FileNotFoundError(f"输出目录不存在: {output_path}")
+#         args.append(str(output_path.resolve()))
+    
+#     if amap_key.strip():
+#         args.append(amap_key.strip())
+
+#     try:
+#         process = subprocess.Popen(
+#             args,
+#             stdout=subprocess.PIPE,
+#             stderr=subprocess.PIPE,
+#             text=True,
+#             shell=False
+#         )
+#     except subprocess.CalledProcessError as e:
+#         # 增强错误信息可读性
+#         err_msg = f"程序执行失败(返回码:{e.returncode})\n错误输出:\n{e.stderr}"
+#         raise subprocess.CalledProcessError(e.returncode, e.cmd, err_msg) from None
+
+#     # 提取成功信息（兼容不同输出格式）
+#     success_msg = ""
+#     for line in result.stdout.splitlines():
+#         if "数据已保存到" in line or "Saved to" in line.lower():
+#             success_msg = line
+#             break
+
+#     return (
+#         f"{success_msg}\n[程序输出]\n{result.stdout}" if success_msg else result.stdout,
+#         result.stderr
+#     )
+
 def get_road_poi(
     city_code: str,
     output_dir: str = "",
     amap_key: str = ""
-) -> Union[Tuple[str, str], subprocess.Popen]:
+    ) -> Union[Tuple[str, str], subprocess.Popen]:
     """
     获取道路POI数据，非阻塞模式，创建新进程进行数据获取
 
@@ -24,24 +87,24 @@ def get_road_poi(
         非阻塞模式: subprocess.Popen 进程对象
 
     Raises:
+
         ValueError: 参数验证失败
         FileNotFoundError: 指定输出目录不存在
     """
-    # 参数验证
-    if not city_code.strip():
-        raise ValueError("行政区划代码不能为空")
-    
     # 构造命令参数列表
     args = ["./GetRoadPOI.exe", city_code]
-    
+
     if output_dir.strip():
+
         output_path = Path(output_dir.strip())
         if not output_path.exists():
             raise FileNotFoundError(f"输出目录不存在: {output_path}")
         args.append(str(output_path.resolve()))
-    
+
     if amap_key.strip():
+
         args.append(amap_key.strip())
+
 
     try:
         process = subprocess.Popen(
@@ -49,24 +112,12 @@ def get_road_poi(
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
+
             shell=False
         )
-    except subprocess.CalledProcessError as e:
-        # 增强错误信息可读性
-        err_msg = f"程序执行失败(返回码:{e.returncode})\n错误输出:\n{e.stderr}"
-        raise subprocess.CalledProcessError(e.returncode, e.cmd, err_msg) from None
-
-    # 提取成功信息（兼容不同输出格式）
-    success_msg = ""
-    for line in result.stdout.splitlines():
-        if "数据已保存到" in line or "Saved to" in line.lower():
-            success_msg = line
-            break
-
-    return (
-        f"{success_msg}\n[程序输出]\n{result.stdout}" if success_msg else result.stdout,
-        result.stderr
-    )
+        return process
+    except Exception as e:
+        raise RuntimeError(f"启动进程失败: {str(e)}") from e
 
 def get_road_tian(
     city_code: str,
