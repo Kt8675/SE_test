@@ -19,7 +19,7 @@
 from qt_core import *
 from gui.widgets import *
 from gui.core.json_themes import Themes
-
+from gui.uis.windows.main_window.fetch_roads_data import get_road_poi, get_road_tian
 
 class Ui_MainPages(object):
     def setupUi(self, MainPages):
@@ -218,11 +218,6 @@ class Ui_MainPages(object):
             context_color = self.themes["app_color"]["context_color"]
         )
         self.api_input.setMinimumHeight(30)
-<<<<<<< HEAD
-=======
-        self.api_input.setStyleSheet(f"font-size: {self.page_3_font_str}; padding: 4px;")
-        self.api_input.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
->>>>>>> 24096447b53fb11ac1d09282ec715d73cdcfefc0
 
         self.api_save_btn = QPushButton("保存")
         self.api_save_btn.setMinimumWidth(80)
@@ -337,6 +332,12 @@ class Ui_MainPages(object):
         self.config_layout_GD = QVBoxLayout(self.config_frame)
         self.config_layout_GD.setSpacing(8)
         
+        # api工具切换
+        self.fetch_tool_combox = QComboBox()
+        self.fetch_tool_combox.addItem("高德API")
+        self.fetch_tool_combox.addItem("天地图API")
+        self.fetch_tool_combox.currentTextChanged.connect(self.change_fetch_tool)
+        
         # 行政区划代码输入
         self.city_code_layout = QHBoxLayout()
         self.city_code_label = QLabel("行政区划代码:")
@@ -344,6 +345,7 @@ class Ui_MainPages(object):
         self.city_code_input.setPlaceholderText("例如: 110000 (北京)")
         self.city_code_layout.addWidget(self.city_code_label)
         self.city_code_layout.addWidget(self.city_code_input)
+        self.city_code_layout.addWidget(self.fetch_tool_combox)
         
         # 输出路径选择
         self.output_path_layout = QHBoxLayout()
@@ -377,7 +379,26 @@ class Ui_MainPages(object):
         self.execute_btn_GD = QPushButton("获取POI数据")
         self.execute_btn_GD.setFixedHeight(40)
         self.execute_layout_GD.addWidget(self.execute_btn_GD)
+        self.execute_btn_GD.clicked.connect(self.fetch_roads_data)
+        # 天地图api
+        # self.api_key_layout_TM = QHBoxLayout()
+        # self.api_key_label_TM= QLabel("天地图API 查询条件:")
+        # self.api_key_input_TM = QLineEdit()
+        # self.api_key_input_TM.setPlaceholderText("留空使用默认Key")
+        # self.api_key_layout_TM.addWidget(self.api_key_label_GD)
+        # self.api_key_layout_TM.addWidget(self.api_key_input_GD)
+        # self.api_key_input_TM.setVisible(False)
         
+        # 执行按钮区域
+        # self.execute_frame_TM = QFrame(self.page_fetch_data)
+        # self.execute_layout_TM = QHBoxLayout(self.execute_frame_TM)
+        # self.execute_layout_TM.setContentsMargins(0, 0, 0, 0)
+        
+        # self.execute_btn_TM = QPushButton("获取数据")
+        # self.execute_btn_TM.setFixedHeight(40)
+        # self.execute_layout_TM.addWidget(self.execute_btn_GD)
+        # self.execute_layout_TM.setVisible(False)
+
         # 输出日志区域
         self.log_frame = QFrame(self.page_fetch_data)
         self.log_frame.setFrameShape(QFrame.StyledPanel)
@@ -423,6 +444,47 @@ class Ui_MainPages(object):
         self.pages.setCurrentIndex(0)
     # setupUi
 
+    def fetch_roads_data(self): 
+        code = self.city_code_input.text()
+        data_path = self.output_path_input.text()
+        apikey = self.api_key_input_GD.text()
+        stdout, errout = get_road_poi(code, data_path, apikey) # 返回值为：（标准流输出，错误流输出）
+        self.log_output.append(f"标准流输出：\n{stdout}\n错误流输出：\n{errout}")
+
+    def fetch_roads_data_TM(self):
+        print("***************************")
+        code = self.city_code_input.text()
+        data_path = self.output_path_input.text()
+        apikey = self.api_key_input_GD.text()
+        stdout = get_road_tian(code, data_path, apikey) # 返回值为：（标准流输出，错误流输出）
+        self.log_output.append(f"标准流输出：\n{stdout}")
+    def change_fetch_tool(self, text):
+        if text == "高德API":
+            # self.api_key_layout_GD.setVisible(True)
+            
+            self.city_code_label.setText("行政区划代码:")
+            self.city_code_input.setPlaceholderText("例如: 110000 (北京)")
+            self.api_key_label_GD.setText("高德API Key:")
+            self.api_key_input_GD.setPlaceholderText("留空使用默认Key")
+            self.execute_btn_GD.clicked.disconnect()
+            print("**** changed to GD Map ****")
+            self.execute_btn_GD.setText("获取POI数据")
+            self.execute_btn_GD.clicked.connect(self.fetch_roads_data)
+            # self.api_key_input_GD.setPlaceholderText("留空使用默认Key")
+            None
+        else:
+            self.city_code_label.setText("城市编码:")
+            self.city_code_input.setPlaceholderText("例如: 156440300(深圳)")
+            self.api_key_label_GD.setText("筛选关键词:")
+            self.execute_btn_GD.setText("获取天地图数据")
+            self.api_key_input_GD.setPlaceholderText("")
+            self.execute_btn_GD.clicked.disconnect()
+            print("**** changed to Tian Map ****")
+            self.execute_btn_GD.setText("获取天地图数据")
+            self.execute_btn_GD.clicked.connect(self.fetch_roads_data_TM)
+            # self.api_key_input_GD.setPlaceholderText("留空使用默认Key")
+            
+    # change_fetch_tool
     def retranslateUi(self, MainPages):
         MainPages.setWindowTitle(QCoreApplication.translate("MainPages", u"Form", None))
         self.label.setText(QCoreApplication.translate("MainPages", u"Welcome To PyOneDark GUI", None))

@@ -373,12 +373,12 @@ class MainWindow(QMainWindow):
             data_list = data_list[0]
             return data_list
         
-    def fetch_roads_data(self): 
-        code = self.ui.load_pages.city_code_input.text()
-        data_path = self.ui.load_pages.output_path_input.text()
-        apikey = self.ui.load_pages.api_key_input_GD.text()
-        stdout, errout = get_road_poi(code, data_path, apikey) # 返回值为：（标准流输出，错误流输出）
-        self.ui.load_pages.log_output.append(f"标准流输出：\n{stdout}\n错误流输出：\n{errout}")
+    # def fetch_roads_data(self): 
+    #     code = self.ui.load_pages.city_code_input.text()
+    #     data_path = self.ui.load_pages.output_path_input.text()
+    #     apikey = self.ui.load_pages.api_key_input_GD.text()
+    #     stdout, errout = get_road_poi(code, data_path, apikey) # 返回值为：（标准流输出，错误流输出）
+    #     self.ui.load_pages.log_output.append(f"标准流输出：\n{stdout}\n错误流输出：\n{errout}")
     
     def filtered_data_keywork(self, info):
         df = pd.DataFrame(self.data_list, columns=['name_road', 'name_district', 'city', 'province'])
