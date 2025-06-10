@@ -218,6 +218,8 @@ class Ui_MainPages(object):
             context_color = self.themes["app_color"]["context_color"]
         )
         self.api_input.setMinimumHeight(30)
+        self.api_input.setStyleSheet(f"font-size: {self.page_3_font_str}; padding: 4px;")
+        self.api_input.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
         self.api_save_btn = QPushButton("保存")
         self.api_save_btn.setMinimumWidth(80)

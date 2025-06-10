@@ -431,6 +431,9 @@ class SetupMainWindow:
         # 连接按钮-获取数据页（page_fetch_data）
         # self.ui.load_pages.execute_btn_GD.clicked.connect(self.fetch_roads_data)
 
+        self.table_widget = self.table_widget  # 显式提醒自己这个组件已注册
+
+
         # ///////////////////////////////////////////////////////////////
         # END - EXAMPLE CUSTOM WIDGETS
         # ///////////////////////////////////////////////////////////////
