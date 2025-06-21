@@ -224,6 +224,7 @@ class MainWindow(QMainWindow):
         # 从界面获取输入
         api_key = self.ui.load_pages.api_input.text().strip()
         user_input = self.ui.load_pages.chat_input.text().strip()
+        model_provider = self.ui.load_pages.model_selcet.currentText().strip()
 
         if not user_input:
             return
@@ -234,13 +235,14 @@ class MainWindow(QMainWindow):
 
         # 调用封装方法处理模型请求
         prompt_prefix = self.ui.load_pages.prompt_hint.currentText().strip()
-        reply = handle_llm_query(api_key, user_input, prompt_prefix=prompt_prefix)
+        reply = handle_llm_query(model_provider, api_key, user_input, prompt_prefix=prompt_prefix)
 
         # 显示模型回复
         self.ui.load_pages.chat_display.append(f"<b>模型：</b> {reply}")
 
     def on_save_api_key(self):
         key = self.ui.load_pages.api_input.text()
+        model_provider = self.ui.load_pages.model_selcet.currentText().strip()
         if key:
             save_api_key(key)
 

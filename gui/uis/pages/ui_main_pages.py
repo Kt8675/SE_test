@@ -198,12 +198,15 @@ class Ui_MainPages(object):
         self.api_frame.setFrameShadow(QFrame.Raised)
         self.api_layout = QHBoxLayout(self.api_frame)
 
-        self.api_label = QLabel("ModelScope API Key:")
-        # self.api_input = QLineEdit()
-        # self.api_input.setPlaceholderText("请输入 API Key")
-        # self.api_input.setMinimumHeight(30)
-        # self.api_input.setStyleSheet("font-size: 14px; padding: 4px;")
-        # self.api_input.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.model_selcet = QComboBox()
+        self.model_selcet.setMinimumHeight(32)
+        self.model_selcet.setStyleSheet(f"font-size: {self.page_3_font_str};")
+        self.model_selcet.addItems([
+            "ModelScope",
+            "DeepSeek"
+        ])
+        self.api_label = QLabel("API Key:")
+
         themes = Themes()
         self.themes = themes.items
         self.api_input = PyLineEdit(
@@ -224,6 +227,7 @@ class Ui_MainPages(object):
         self.api_save_btn = QPushButton("保存")
         self.api_save_btn.setMinimumWidth(80)
 
+        self.api_layout.addWidget(self.model_selcet)
         self.api_layout.addWidget(self.api_label)
         self.api_layout.addWidget(self.api_input)
         self.api_layout.addWidget(self.api_save_btn)

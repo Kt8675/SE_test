@@ -7,6 +7,7 @@ pip install pyside6
 pip install requests
 pip install pandas
 pip install matplotlib
+pip install openai
 ```
 注意：GetRoadPOI.exe手动gitignore了，请自行将其放入根目录
 
