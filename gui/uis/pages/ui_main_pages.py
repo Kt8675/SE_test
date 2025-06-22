@@ -468,9 +468,16 @@ class Ui_MainPages(object):
             self.road_poi_process = get_road_poi(code, data_path, apikey)
             
             # 设置定时器检查进程状态
-            self.road_poi_timer = QTimer()
-            self.road_poi_timer.timeout.connect(self.check_road_poi_process)
-            self.road_poi_timer.start(500)  # 每500ms检查一次
+            # self.road_poi_timer = QTimer()
+            # self.road_poi_timer.timeout.connect(self.check_road_poi_process)
+            # self.road_poi_timer.start(500)  # 每500ms检查一次
+
+            # 采用定时器会导致进程阻塞（不清楚原因）
+            # 获取进程输出
+            stdout, stderr = self.road_poi_process.communicate()
+            # print(stdout)
+            # 显示结果
+            self.log_output.append(f"标准流输出：\n{stdout}\n错误流输出：\n{stderr}")
             
         except Exception as e:
             self.log_output.append(f"启动进程失败: {str(e)}")
@@ -479,15 +486,22 @@ class Ui_MainPages(object):
 
     def check_road_poi_process(self):
         """检查非阻塞进程状态的定时器回调"""
+        print("进程状态检查")
+        print(self.road_poi_process.poll())
         if self.road_poi_process.poll() is not None:  # 进程已完成
             self.road_poi_timer.stop()
             
             # 获取进程输出
             stdout, stderr = self.road_poi_process.communicate()
+            print(stdout)
             # 显示结果
             self.log_output.append(f"标准流输出：\n{stdout}\n错误流输出：\n{stderr}")
             # 恢复按钮状态
             self.enable_inputs()
+        else:
+            stdout, stderr = self.road_poi_process.communicate()
+            print(stdout)
+            print(stderr)
 
     def enable_inputs(self):
         """恢复输入控件和按钮的状态"""

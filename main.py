@@ -350,7 +350,7 @@ class MainWindow(QMainWindow):
             data_list = data_list[0]
             return data_list
 
-        # 偷个懒，由于没有收集到全部省份的道路信息，所以只写简化的处理逻辑
+        # 由于没有收集到全部省份的道路信息，所以只写简化的处理逻辑
         # 所有城市的道路信息
         else:
             # print('province:'+province)

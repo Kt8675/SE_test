@@ -42,8 +42,10 @@ def get_road_poi(
 
         args.append(amap_key.strip())
 
+    # print(args)
 
     try:
+        print("启动进程...")
         process = subprocess.Popen(
             args,
             stdout=subprocess.PIPE,

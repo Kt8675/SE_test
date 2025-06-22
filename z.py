@@ -1,15 +1,19 @@
-import os, sys
-import csv
-from ManipulateRoadPOI import *
-from data.data import code_dict
-import pandas as pd
+import subprocess
+from pathlib import Path
+from typing import Optional, Tuple, Union
+import os
+import requests
 
-# df_info_name = 'DF_Road_Info#440300.csv'
+args = ["./GetRoadPOI.exe", "110100", "E:\\empty", "b3b33af2c53dae929c336dcb1aec5824 "]
+print("执行命令:", args)
+process = subprocess.Popen(
+            args,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
 
+            shell=False
+        )
 
-province = '广东省'
-city = '深圳市'
-region = '南山区'
-
-data_list = [['广东省', '深圳市'],['广东省', '广州市']]
-data = pd.DataFrame(data_list,columns=['省','市'])
+stdout, stderr = process.communicate()
+print(stdout)
