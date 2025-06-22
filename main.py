@@ -324,6 +324,24 @@ class MainWindow(QMainWindow):
         data_list = []
         if city == '':
             city = '全部'
+        province_code = code_dict[province]
+        # print("province_code:{}".format(province_code))
+
+        # 如果不存在相应省份的数据文件则返回空
+        province_dir_name = 'DF_' + str(province_code//10000)
+        # print("province_dir_name:{}".format(province_dir_name))
+        # if not os.path.exists(province_dir_name):
+        #     return []
+        flag = True
+        for dir_name in os.listdir('data'):
+            # print(dir_name)
+            if province_dir_name in dir_name:
+                # print('***********************')
+                flag = False
+                break
+        if flag:
+            return []
+
         # 选择指定城市
         if city != '全部':
             # print('getdata:' + city + '.')
@@ -350,7 +368,7 @@ class MainWindow(QMainWindow):
             data_list = data_list[0]
             return data_list
 
-        # 由于没有收集到全部省份的道路信息，所以只写简化的处理逻辑
+        # 由于没有收集到全部省份的道路信息，所以没写省份变化的处理逻辑
         # 所有城市的道路信息
         else:
             # print('province:'+province)

@@ -20,6 +20,7 @@ from qt_core import *
 from gui.widgets import *
 from gui.core.json_themes import Themes
 from gui.uis.windows.main_window.fetch_roads_data import get_road_poi, get_road_tian
+import threading
 
 class Ui_MainPages(object):
     def setupUi(self, MainPages):
@@ -453,6 +454,7 @@ class Ui_MainPages(object):
     def fetch_roads_data(self): 
         self.road_poi_process = None  # 存储进程对象
         self.road_poi_timer = None     # 存储定时器对象
+        self.thread = None          # 存储线程对象
 
         self.execute_btn_GD.setEnabled(False)
         self.city_code_input.setEnabled(False)
@@ -464,44 +466,54 @@ class Ui_MainPages(object):
         data_path = self.output_path_input.text()
         apikey = self.api_key_input_GD.text()
         try:
-            # 启动非阻塞进程
-            self.road_poi_process = get_road_poi(code, data_path, apikey)
-            
+            def run_fetch_task():
+                self.road_poi_process = get_road_poi(code, data_path, apikey)
+                stdout, stderr = self.road_poi_process.communicate()
+            # 显示结果
+                self.log_output.append(f"标准流输出：\n{stdout}\n错误流输出：\n{stderr}")
+            # 采用线程启动
+            thread = threading.Thread(target=run_fetch_task)
+            thread.start()
+            self.execute_btn_GD.setText("终止数据获取")
+            self.execute_btn_GD.clicked.disconnect()
+            self.execute_btn_GD.clicked.connect(self.close_thread)
+            self.enable_inputs()
             # 设置定时器检查进程状态
             # self.road_poi_timer = QTimer()
             # self.road_poi_timer.timeout.connect(self.check_road_poi_process)
             # self.road_poi_timer.start(500)  # 每500ms检查一次
-
             # 采用定时器会导致进程阻塞（不清楚原因）
-            # 获取进程输出
-            stdout, stderr = self.road_poi_process.communicate()
-            # print(stdout)
-            # 显示结果
-            self.log_output.append(f"标准流输出：\n{stdout}\n错误流输出：\n{stderr}")
+
             
         except Exception as e:
             self.log_output.append(f"启动进程失败: {str(e)}")
             self.enable_inputs()
 
+    def close_thread(self):
+        self.road_poi_process.terminate()
+        print('closed')
+        self.execute_btn_GD.setText("获取POI数据")
+        self.execute_btn_GD.clicked.disconnect()
+        self.execute_btn_GD.clicked.connect(self.fetch_roads_data)
 
-    def check_road_poi_process(self):
-        """检查非阻塞进程状态的定时器回调"""
-        print("进程状态检查")
-        print(self.road_poi_process.poll())
-        if self.road_poi_process.poll() is not None:  # 进程已完成
-            self.road_poi_timer.stop()
+    # def check_road_poi_process(self):
+    #     """检查非阻塞进程状态的定时器回调"""
+    #     print("进程状态检查")
+    #     print(self.road_poi_process.poll())
+    #     if self.road_poi_process.poll() is not None:  # 进程已完成
+    #         self.road_poi_timer.stop()
             
-            # 获取进程输出
-            stdout, stderr = self.road_poi_process.communicate()
-            print(stdout)
-            # 显示结果
-            self.log_output.append(f"标准流输出：\n{stdout}\n错误流输出：\n{stderr}")
-            # 恢复按钮状态
-            self.enable_inputs()
-        else:
-            stdout, stderr = self.road_poi_process.communicate()
-            print(stdout)
-            print(stderr)
+    #         # 获取进程输出
+    #         stdout, stderr = self.road_poi_process.communicate()
+    #         print(stdout)
+    #         # 显示结果
+    #         self.log_output.append(f"标准流输出：\n{stdout}\n错误流输出：\n{stderr}")
+    #         # 恢复按钮状态
+    #         self.enable_inputs()
+    #     else:
+    #         stdout, stderr = self.road_poi_process.communicate()
+    #         print(stdout)
+    #         print(stderr)
 
     def enable_inputs(self):
         """恢复输入控件和按钮的状态"""
