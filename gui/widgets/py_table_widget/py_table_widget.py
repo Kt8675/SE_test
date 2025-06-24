@@ -134,6 +134,10 @@ class PyTableWidget(QTableWidget):
     def set_column(self):
         self.column_0 = QTableWidgetItem()
         self.column_0.setTextAlignment(Qt.AlignCenter)
+
+        self.column_5 = QTableWidgetItem()
+        self.column_5.setTextAlignment(Qt.AlignCenter)
+        self.column_5.setText("街道")
         
         self.column_4 = QTableWidgetItem()
         self.column_4.setTextAlignment(Qt.AlignCenter)
@@ -152,9 +156,10 @@ class PyTableWidget(QTableWidget):
         self.column_1.setText("街/巷/路/道")
         self.setHorizontalHeaderItem(0, self.column_0)
         self.setHorizontalHeaderItem(1, self.column_1)
-        self.setHorizontalHeaderItem(2, self.column_2)
-        self.setHorizontalHeaderItem(3, self.column_3)
-        self.setHorizontalHeaderItem(4, self.column_4)
+        self.setHorizontalHeaderItem(2, self.column_5)
+        self.setHorizontalHeaderItem(3, self.column_2)
+        # self.setHorizontalHeaderItem(4, self.column_4) 省
+        self.setHorizontalHeaderItem(4, self.column_3)
         self.setColumnWidth(0, 10)
     def select_all(self):
         # 在有勾选框未被勾选时，按下按钮设置所有勾选框为选中状态
@@ -210,9 +215,10 @@ class PyTableWidget(QTableWidget):
             checkbox.clicked.connect(self.checkbox_clicked)
             # print(data)
             self.setItem(row_number, 1, QTableWidgetItem(data[0]))
-            self.setItem(row_number, 2, QTableWidgetItem(data[1]))
-            self.setItem(row_number, 3, QTableWidgetItem(data[2]))
+            self.setItem(row_number, 2, QTableWidgetItem(data[2]))
+            self.setItem(row_number, 3, QTableWidgetItem(data[1]))
             self.setItem(row_number, 4, QTableWidgetItem(data[3]))
+            # self.setItem(row_number, 5, QTableWidgetItem(data[4]))
             if self.rowCount() >= 100:  # 目前只允许最多显示100条数据，后面有时间再整多页面显示
                 break
         with open('./data/data.txt' , 'w', encoding='utf-8') as f:

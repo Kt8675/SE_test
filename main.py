@@ -25,6 +25,7 @@ from ManipulateRoadPOI import *
 from gui.uis.windows.main_window.fetch_roads_data import get_road_poi
 import pandas as pd
 import numpy as np
+from math import nan
 
 # IMPORT QT CORE
 # ///////////////////////////////////////////////////////////////
@@ -320,7 +321,7 @@ class MainWindow(QMainWindow):
 
     def filtered_data(self, province, city, region):
         df = os.listdir('./data')
-        df = [i for i in df if 'DF' in i]
+        df = [i for i in df if 'Data_Info#' in i]
         data_list = []
         if city == '':
             city = '全部'
@@ -328,7 +329,7 @@ class MainWindow(QMainWindow):
         # print("province_code:{}".format(province_code))
 
         # 如果不存在相应省份的数据文件则返回空
-        province_dir_name = 'DF_' + str(province_code//10000)
+        province_dir_name = 'Data_Info#' + str(province_code//10000)
         # print("province_dir_name:{}".format(province_dir_name))
         # if not os.path.exists(province_dir_name):
         #     return []
@@ -346,26 +347,46 @@ class MainWindow(QMainWindow):
         if city != '全部':
             # print('getdata:' + city + '.')
             df_info_name = 'DF_Road_Info#' + str(code_dict[city]) + '.csv'
-            dir = 'DF_' + str(code_dict[city])
+            df_ad_name = 'DF_AD_Info#' + str(code_dict[city]) + '.csv'
+            dir = 'Data_Info#' + str(code_dict[city])
             df_info = os.path.join('data',dir, df_info_name) # Data_Info#440300\DF_Road_Info#440300.csv
+            df_ad = os.path.join('data', dir, df_ad_name)
             if not os.path.exists(df_info):
                 # 文件不存在则返回空list
                 print(df_info)
                 print("file not exists")
                 return []
-            df = load_df_csv(file=df_info)
             df_road_info = load_df_csv(file=df_info)    
-            df_filtered = filter_df_column(df=df_road_info,columns=['name_road','name_district'])   # 仅选用道路信息和城市信息
+            df_ad_info = load_df_csv(file=df_ad)
+            df_road_info = concat_df_left(df_left=df_road_info,df_right=df_ad_info,column="towncode")
+            # print(df_road_info)
+            df_filtered = filter_df_column(df=df_road_info,columns=['name_road','name_district', 'township'])   # 仅选用道路信息和城市信息
+            # print(df_filtered)
             # 选择指定区县 
             if region != '全部':
                 df_filtered = filter_df_keyword(df=df_filtered,column='name_district', keyword=region)
 
             temp_list = df_filtered.to_numpy().tolist()
-            data_list.append(temp_list)
+            # data_list.append(temp_list)
+            flag = True
             for i in temp_list:
-                i.append(city)
-                i.append(province)
-            data_list = data_list[0]
+                temp = []
+                temp.append(i[0])
+                temp.append(i[1])
+                # print(len(i))
+                # print(i[2])
+                if isinstance(i[2], float):
+                # if i[2] == nan:
+                    temp.append('无')
+                else:
+                    if flag:
+                        print(i[2])
+                        flag = False
+                    temp.append(i[2])
+                temp.append(city)
+                temp.append(province)
+                data_list.append(temp)
+
             return data_list
 
         # 由于没有收集到全部省份的道路信息，所以没写省份变化的处理逻辑
@@ -373,24 +394,39 @@ class MainWindow(QMainWindow):
         else:
             # print('province:'+province)
             for dir in df:
-                if 'DF' in dir:
-                    adcode = dir[-6:]
+                if 'Data_Info' in dir:
+                    adcode = dir[-6:]   # 获取adcode
                     city = city_code_dict[int(adcode)]
                     # print(adcode)
                     file_name = 'DF_Road_Info#' + adcode +'.csv'
+                    df_ad_name = 'DF_AD_Info#' + str(code_dict[city]) + '.csv'
                     df_info = os.path.join('data' , dir, file_name)
+                    df_ad = os.path.join('data', dir, df_ad_name)
                     # print(df_info)
                     df_road_info = load_df_csv(file=df_info)
+                    df_ad_info = load_df_csv(file=df_ad)
+                    df_road_info = concat_df_left(df_left=df_road_info,df_right=df_ad_info,column="towncode")
                     # print(df_road_info) # 有内容
-                    df_filtered = filter_df_column(df=df_road_info,columns=['name_road','name_district'])
+                    df_filtered = filter_df_column(df=df_road_info,columns=['name_road','name_district', 'township'])
                     # df_filtered = filter_df_keyword(df=df_filtered,column='name_district', keyword=region)
                     
                     temp_list = df_filtered.to_numpy().tolist()
                     for i in temp_list:
-                        i.append(city)
-                        i.append(province)
-                    data_list.append(temp_list)
-            data_list = data_list[0]
+                        temp = []
+                        temp.append(i[0])
+                        temp.append(i[1])
+                        if isinstance(i[2], float):
+                        # if i[2] == nan:
+                            temp.append('无')
+                        else:
+                            if flag:
+                                print(i[2])
+                                flag = False
+                            temp.append(i[2])
+                        temp.append(city)
+                        temp.append(province)
+                        data_list.append(temp)
+            # data_list = data_list[0]
             return data_list
         
     # def fetch_roads_data(self): 
