@@ -49,16 +49,16 @@ python main.py
 ![](figs/DataAccess.png)
 
 ### 道路信息展示与导出
-使用这一功能前，请将上一步获取的数据移动到`SE_test/data`文件夹中，命名格式保持为`DF_行政区划代码`，比如`DF_440100`。随后，点击左侧导航栏第二个界面：
+使用这一功能前，请将上一步获取的数据移动到`SE_test/data`文件夹中，命名格式保持为`Data_Info#行政区划代码`，比如`Data_Info#440100`。随后，点击左侧导航栏第二个界面：
 ![](figs/DataPlaylist.png)
 按照提示选择需要的城市的数据，点击`Output`可以导出。
 ![](figs/DataPlaylist2.png)
-其中，`Output All`代表输出所有文件；`Select All`代表选择当前所有道路；`Previous`和`Next`分别代表上一页和下一页。
+其中，`Output All`代表输出当前检索的所有道路到一个文件；`Select All`代表选择当前页面所有道路；`Previous`和`Next`分别代表上一页和下一页。
 
-如果想要快速复现，可以使用提前获取好的道路数据（深圳市+广州市+东莞市，[百度网盘链接](https://pan.baidu.com/s/1mdl-E7cWW1IUCsICAtp8pA?pwd=7h9e)）放入`SE_test/data`文件夹中，以取代原始数据获取的步骤。
+如果想要快速复现，可以使用提前获取好的道路数据（深圳市+广州市+东莞市，[百度网盘链接](https://pan.baidu.com/s/1dtfhMrhTsHzeZp0jvL_lKg?pwd=1bxy )）放入`SE_test/data`文件夹中，以取代原始数据获取的步骤。
 
 ### 大模型助手
-可配置DeepSeek和ModelScope的API，提供辅助，包括模糊搜索、行政区划查询等。点击左侧导航栏第二个界面，选择`DeepSeek`或者`ModelScope`，输入对应的`API Key`，在聊天框输入对话内容，点击`发送`。
+可配置DeepSeek和ModelScope的API提供大模型对话辅助，包括模糊搜索、行政区划查询等。点击左侧导航栏第二个界面，选择`DeepSeek`或者`ModelScope`，输入对应的`API Key`，在聊天框输入对话内容，点击`发送`。
 ![](figs/LLM.png)
 
 
