@@ -45,7 +45,7 @@ def get_road_poi(
     # print(args)
 
     try:
-        print("启动进程...")
+        # print("启动进程...")
         process = subprocess.Popen(
             args,
             stdout=subprocess.PIPE,

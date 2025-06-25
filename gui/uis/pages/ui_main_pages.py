@@ -491,7 +491,7 @@ class Ui_MainPages(object):
 
     def close_thread(self):
         self.road_poi_process.terminate()
-        print('closed')
+        # print('closed')
         self.execute_btn_GD.setText("获取POI数据")
         self.execute_btn_GD.clicked.disconnect()
         self.execute_btn_GD.clicked.connect(self.fetch_roads_data)
@@ -530,7 +530,7 @@ class Ui_MainPages(object):
         event.accept()
 
     def fetch_roads_data_TM(self):
-        print("***************************")
+        # print("***************************")
         code = self.city_code_input.text()
         data_path = self.output_path_input.text()
         apikey = self.api_key_input_GD.text()
@@ -546,7 +546,7 @@ class Ui_MainPages(object):
             self.api_key_label_GD.setText("高德API Key:")
             self.api_key_input_GD.setPlaceholderText("留空使用默认Key")
             self.execute_btn_GD.clicked.disconnect()
-            print("**** changed to GD Map ****")
+            # print("**** changed to GD Map ****")
             self.execute_btn_GD.setText("获取POI数据")
             self.execute_btn_GD.clicked.connect(self.fetch_roads_data)
             # self.api_key_input_GD.setPlaceholderText("留空使用默认Key")
@@ -558,7 +558,7 @@ class Ui_MainPages(object):
             self.execute_btn_GD.setText("获取天地图数据")
             self.api_key_input_GD.setPlaceholderText("")
             self.execute_btn_GD.clicked.disconnect()
-            print("**** changed to Tian Map ****")
+            # print("**** changed to Tian Map ****")
             self.execute_btn_GD.setText("获取天地图数据")
             self.execute_btn_GD.clicked.connect(self.fetch_roads_data_TM)
             # self.api_key_input_GD.setPlaceholderText("留空使用默认Key")

@@ -319,6 +319,11 @@ class MainWindow(QMainWindow):
         data_list = self.filtered_data_keywork(info)
         self.table_widget.set_data(data_list)
 
+    def street_edit_filter_data(self):
+        info = self.street_edit.text()
+        data_list = self.filtered_data_keywork_bystreet(info)
+        self.table_widget.set_data(data_list)
+
     def filtered_data(self, province, city, region):
         df = os.listdir('./data')
         df = [i for i in df if 'Data_Info#' in i]
@@ -437,8 +442,13 @@ class MainWindow(QMainWindow):
     #     self.ui.load_pages.log_output.append(f"标准流输出：\n{stdout}\n错误流输出：\n{errout}")
     
     def filtered_data_keywork(self, info):
-        df = pd.DataFrame(self.data_list, columns=['name_road', 'name_district', 'city', 'province'])
+        df = pd.DataFrame(self.data_list, columns=['name_road', 'name_district', 'township', 'city', 'province'])
         df = filter_df_keyword(df=df,column='name_road', keyword=info)
+        return df.to_numpy().tolist()
+    
+    def filtered_data_keywork_bystreet(self, info):
+        df = pd.DataFrame(self.data_list, columns=['name_road', 'name_district', 'township', 'city', 'province'])
+        df = filter_df_keyword(df=df,column='township', keyword=info)
         return df.to_numpy().tolist()
         
 

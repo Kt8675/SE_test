@@ -213,7 +213,7 @@ class PyTableWidget(QTableWidget):
             checkbox = QCheckBox()
             self.setCellWidget(row_number, 0, checkbox)
             checkbox.clicked.connect(self.checkbox_clicked)
-            # print(data)
+            # 每条data包含5项内容：道路名称，所属区县，所属街道，所属市，所属省
             self.setItem(row_number, 1, QTableWidgetItem(data[0]))
             self.setItem(row_number, 2, QTableWidgetItem(data[2]))
             self.setItem(row_number, 3, QTableWidgetItem(data[1]))
@@ -225,19 +225,11 @@ class PyTableWidget(QTableWidget):
             f.write(str(data_list))
         self.page = 1
         self.page_max = ((len(data_list) // 200) + 1) if len(data_list) % 200 != 0 else len(data_list) // 200
-        print("now page max: "+str(self.page_max))
+        # print("now page max: "+str(self.page_max))
         self.viewport().update()  # 强制更新表格显示
         return
     
     def load_data(self, page):
-        # for row_number in range(start_row, start_row + batch_size):
-        #     if row_number >= self.total_rows:  # 如果当前行数大于总行数，则跳出循环
-        #         break
-        #     self.insertRow(self.rowCount())
-        #     self.setItem(row_number, 1, QTableWidgetItem(data[0]))
-        #     self.setItem(row_number, 2, QTableWidgetItem(data[1]))
-        #     self.setItem(row_number, 3, QTableWidgetItem(data[2]))
-        #     self.setItem(row_number, 4, QTableWidgetItem(data[3]))
         num = 200
         with open('./data/data.txt', 'r', encoding='utf-8') as f:
             data_list = eval(f.read())
@@ -260,7 +252,7 @@ class PyTableWidget(QTableWidget):
             self.setItem(row_number, 3, QTableWidgetItem(data[2]))
             self.setItem(row_number, 4, QTableWidgetItem(data[3]))
         self.viewport().update()
-        print('now page:' + str(self.page))
+        # print('now page:' + str(self.page))
 
     def previous(self):
         if self.page == 1:

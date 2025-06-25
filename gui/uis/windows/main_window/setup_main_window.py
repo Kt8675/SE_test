@@ -253,7 +253,7 @@ class SetupMainWindow:
         # PY LINE EDIT
         self.line_edit = PyLineEdit(
             text = "",
-            place_holder_text = "输入关键词以筛选",
+            place_holder_text = "输入关键词以筛选道路名称",
             radius = 8,
             border_size = 2,
             color = self.themes["app_color"]["text_foreground"],
@@ -264,6 +264,20 @@ class SetupMainWindow:
         )
         self.line_edit.setMinimumHeight(30)
         self.line_edit.editingFinished.connect(self.line_edit_filter_data)
+
+        self.street_edit = PyLineEdit(
+            text = "",
+            place_holder_text = "输入关键词以筛选所属街道名称",
+            radius = 8,
+            border_size = 2,
+            color = self.themes["app_color"]["text_foreground"],
+            selection_color = self.themes["app_color"]["white"],
+            bg_color = self.themes["app_color"]["dark_one"],
+            bg_color_active = self.themes["app_color"]["dark_three"],
+            context_color = self.themes["app_color"]["context_color"]
+        )
+        self.street_edit.setMinimumHeight(30)
+        self.street_edit.editingFinished.connect(self.street_edit_filter_data)
         # TOGGLE BUTTON
         # self.toggle_button = PyToggle(
         #     width = 50,
@@ -310,33 +324,6 @@ class SetupMainWindow:
         self.table_widget.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.table_widget.setSelectionBehavior(QAbstractItemView.SelectRows)
 
-        # # Columns / Header
-        # self.column_0 = QTableWidgetItem()
-        # self.column_0.setTextAlignment(Qt.AlignCenter)
-        
-        # self.column_1 = QTableWidgetItem()
-        # self.column_1.setTextAlignment(Qt.AlignCenter)
-        # self.column_1.setText("省")
-
-        # self.column_2 = QTableWidgetItem()
-        # self.column_2.setTextAlignment(Qt.AlignCenter)
-        # self.column_2.setText("市")
-
-        # self.column_3 = QTableWidgetItem()
-        # self.column_3.setTextAlignment(Qt.AlignCenter)
-        # self.column_3.setText("区/县")
-
-        # self.column_4 = QTableWidgetItem()
-        # self.column_4.setTextAlignment(Qt.AlignCenter)
-        # self.column_4.setText("街/巷/路/道")
-
-        # # Set column
-        # self.table_widget.setHorizontalHeaderItem(0, self.column_0)
-        # self.table_widget.setHorizontalHeaderItem(1, self.column_1)
-        # self.table_widget.setHorizontalHeaderItem(2, self.column_2)
-        # self.table_widget.setHorizontalHeaderItem(3, self.column_3)
-        # self.table_widget.setHorizontalHeaderItem(4, self.column_4)
-        # self.table_widget.setColumnWidth(0, 10)
 
         # 控制表格列的宽度：第一列根据内容自动计算，1-4列平分剩余空间
         self.table_widget.horizontalHeader().setSectionResizeMode(0,  QHeaderView.ResizeToContents)
@@ -375,6 +362,7 @@ class SetupMainWindow:
         self.ui.load_pages.row_3_layout.addWidget(self.city_combo)
         self.ui.load_pages.row_3_layout.addWidget(self.region_combo)
         # self.ui.load_pages.row_3_layout.addWidget(self.combo_view)
+        self.ui.load_pages.row_4_layout.addWidget(self.street_edit)
         self.ui.load_pages.row_4_layout.addWidget(self.line_edit)
         self.ui.load_pages.row_4_layout.addWidget(self.output_button)
         self.ui.load_pages.row_4_layout.addWidget(self.output_all_button)
