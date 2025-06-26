@@ -316,12 +316,20 @@ class MainWindow(QMainWindow):
 
     def line_edit_filter_data(self):
         info = self.line_edit.text()
-        data_list = self.filtered_data_keywork(info)
+        data_list = self.filtered_data_keywork(info, datalist=None)
+        # data_list = self.filtered_data_keywork_bystreet(info)
+        info_ = self.street_edit.text()
+        if info_ != '':
+            data_list = self.filtered_data_keywork_bystreet(info_, datalist=data_list)
         self.table_widget.set_data(data_list)
 
     def street_edit_filter_data(self):
         info = self.street_edit.text()
-        data_list = self.filtered_data_keywork_bystreet(info)
+        data_list = self.filtered_data_keywork_bystreet(info, datalist=None)
+        info_ = self.line_edit.text()
+
+        if info_ != '':        
+            data_list = self.filtered_data_keywork(info_, datalist=data_list)
         self.table_widget.set_data(data_list)
 
     def filtered_data(self, province, city, region):
@@ -441,13 +449,20 @@ class MainWindow(QMainWindow):
     #     stdout, errout = get_road_poi(code, data_path, apikey) # 返回值为：（标准流输出，错误流输出）
     #     self.ui.load_pages.log_output.append(f"标准流输出：\n{stdout}\n错误流输出：\n{errout}")
     
-    def filtered_data_keywork(self, info):
-        df = pd.DataFrame(self.data_list, columns=['name_road', 'name_district', 'township', 'city', 'province'])
+    def filtered_data_keywork(self, info, datalist):
+        if datalist is None:
+            datalist = self.data_list
+        
+        # df = pd.DataFrame(self.data_list, columns=['name_road', 'name_district', 'township', 'city', 'province'])
+        df = pd.DataFrame(datalist, columns=['name_road', 'name_district', 'township', 'city', 'province'])
         df = filter_df_keyword(df=df,column='name_road', keyword=info)
         return df.to_numpy().tolist()
     
-    def filtered_data_keywork_bystreet(self, info):
-        df = pd.DataFrame(self.data_list, columns=['name_road', 'name_district', 'township', 'city', 'province'])
+    def filtered_data_keywork_bystreet(self, info, datalist):
+        if datalist is None:
+            datalist = self.data_list
+        df = pd.DataFrame(datalist, columns=['name_road', 'name_district', 'township', 'city', 'province'])
+        # df = pd.DataFrame(self.data_list, columns=['name_road', 'name_district', 'township', 'city', 'province'])
         df = filter_df_keyword(df=df,column='township', keyword=info)
         return df.to_numpy().tolist()
         
