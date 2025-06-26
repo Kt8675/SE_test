@@ -30,7 +30,7 @@ from typing import cast
 def remove_control_characters(s):
     return "".join(ch for ch in s if unicodedata.category(ch)[0] != "C")
 
-class BaseTranslator:
+class BaseModel:
     name = "base"
     envs = {}
     lang_map: dict[str, str] = {}
@@ -72,7 +72,7 @@ class BaseTranslator:
             }
         ]
 
-class ModelScopeTranslator(BaseTranslator):
+class ModelScopeModel(BaseModel):
     name = "modelscope"
     envs = {
         "MODELSCOPE_BASE_URL": "https://api-inference.modelscope.cn/v1",
@@ -141,7 +141,7 @@ class ModelScopeTranslator(BaseTranslator):
             # 其他未知异常
             return f"处理过程中发生未知错误: {str(e)}"
 
-class DeepSeekTranslator(BaseTranslator):
+class DeepSeekModel(BaseModel):
     name = "deepseek"
     envs = {
         "DEEPSEEK_BASE_URL": "https://api.deepseek.com/v1",
@@ -164,7 +164,7 @@ class DeepSeekTranslator(BaseTranslator):
         # 扩展请求头
         self.client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
 
-    def do_translate(self, text: str) -> str:
+    def do_chat(self, text: str) -> str:
         try:
             # 构造消息体（兼容OpenAI格式）
             messages = self.prompt(text, self.prompt_template)
@@ -229,11 +229,11 @@ def handle_llm_query(model_provider:str, api_key: str, user_input: str, prompt_p
     API_KEY = api_key
     
     if model_provider == "ModelScope":
-        translator = ModelScopeTranslator(
+        translator = ModelScopeModel(
             api_key=API_KEY
         )
     else:
-        translator = DeepSeekTranslator(
+        translator = DeepSeekModel(
             api_key=API_KEY
         )
 
