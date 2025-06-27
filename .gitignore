@@ -12,3 +12,5 @@ cache
 GetRoadPOI.exe
 天地图AdminCode.csv
 tian_data.json
+dist
+build

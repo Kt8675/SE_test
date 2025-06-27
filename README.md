@@ -34,7 +34,7 @@ PC机：4C8GB内存50GB硬盘
 ```
 pip install -r requirements.txt
 ```
-随后，下载程序核心可执行文件`GetRoadPOI.exe`（[百度网盘链接](https://pan.baidu.com/s/1xsCe3NT_0iaMhTRC78w8lA?pwd=y7gm)），并将其放在主文件夹`SE_test/`中。
+随后，下载程序核心可执行文件`GetRoadPOI.exe`（[百度网盘链接](https://pan.baidu.com/s/1xsCe3NT_0iaMhTRC78w8lA?pwd=y7gm)），并将其放在主文件夹`SE_test/`中。该文件为`SE_test/GetRoadPOI.py`使用pyinstaller打包的可执行文件。
 
 ### 进入可视化界面
 
